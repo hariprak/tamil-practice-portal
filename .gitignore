@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.Python
+.venv/
+venv/
+.env
+.env.*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Local / generated (keep committed words.js if you version it)
+# Uncomment if you prefer not to commit built web data:
+# web/data/words.js

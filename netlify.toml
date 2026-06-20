@@ -1,0 +1,5 @@
+# Netlify: serve the static app from web/ (no build step).
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  publish = "web"
