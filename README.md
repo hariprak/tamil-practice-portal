@@ -22,7 +22,7 @@ It is a **static web app** — no server or internet needed.
 
 That's it. Progress, points and badges are saved in the browser on that device.
 
-The **footer visit number** on the portal and spelling pages is a **shared** counter (all visitors) via a small third-party badge service; it is not stored in your app’s `localStorage`.
+The **footer visit badge** on the spelling page is a **shared** counter (all visitors) via a small third-party service; it is not stored in your app’s `localStorage`. The portal home page has no visit counter.
 
 ### Host it online (free)
 
