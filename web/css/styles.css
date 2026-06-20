@@ -173,18 +173,23 @@ h1, h2, h3 { font-weight: 700; }
   font-weight: 600;
   color: var(--muted);
 }
-.visit-count-num {
+.visit-badge {
+  height: 26px;
+  width: auto;
+  max-width: min(100%, 220px);
+  display: block;
+  vertical-align: middle;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(60, 50, 45, 0.12);
+}
+[data-theme="dark"] .visit-badge {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+.visit-badge-fallback {
   font-size: 1.35rem;
   font-weight: 800;
   color: var(--accent);
   min-width: 1.5em;
-  line-height: 1;
-}
-.visit-count-hint {
-  flex: 1 0 100%;
-  font-size: 11px;
-  font-weight: 500;
-  margin-top: 2px;
 }
 
 .brand-mark {

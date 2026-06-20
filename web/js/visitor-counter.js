@@ -1,38 +1,37 @@
-/* Global visit counter: tries CountAPI, falls back to per-device count (works on file://). */
+/* Shared visit badge (visitor-badge.laobi.icu). Hex colors must use %23 in query strings.
+   Theme-aware tints to match the app’s stone / warm accent palette. */
 (function () {
   "use strict";
-  var el = document.getElementById("visitCount");
-  if (!el) return;
-  var page = el.getAttribute("data-page") || "home";
-  var hint = document.getElementById("visitCountHint");
-  var ns = "tamilvazhikaati";
 
-  function showLocal() {
-    var k = "tamilVazhikaati_visits_" + page;
-    var n = (parseInt(localStorage.getItem(k), 10) || 0) + 1;
-    localStorage.setItem(k, String(n));
-    el.textContent = n.toLocaleString();
-    if (hint) {
-      hint.hidden = false;
-      hint.textContent = "This device only (live total needs internet)";
-    }
+  function badgeUrl(pageId) {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    var left = dark ? "%23706058" : "%23908a84";
+    var right = dark ? "%23987a6d" : "%23d4a08c";
+    var parts = [
+      "page_id=" + encodeURIComponent(pageId),
+      "left_text=" + encodeURIComponent("Visits"),
+      "left_color=" + left,
+      "right_color=" + right,
+      "radius=12",
+      "height=22",
+      "t=" + Date.now(),
+    ];
+    return "https://visitor-badge.laobi.icu/badge?" + parts.join("&");
   }
 
-  el.textContent = "…";
-
-  fetch("https://api.countapi.xyz/hit/" + encodeURIComponent(ns) + "/" + encodeURIComponent(page), {
-    cache: "no-store",
-  })
-    .then(function (r) {
-      if (!r.ok) throw new Error("bad status");
-      return r.json();
-    })
-    .then(function (j) {
-      if (typeof j.value !== "number") throw new Error("no value");
-      el.textContent = j.value.toLocaleString();
-      if (hint) hint.hidden = true;
-    })
-    .catch(function () {
-      showLocal();
+  document.querySelectorAll("img.visit-badge[data-visit-page]").forEach(function (img) {
+    var pageId = img.getAttribute("data-visit-page");
+    if (!pageId) return;
+    img.alt = "Visit count (shared)";
+    img.src = badgeUrl(pageId);
+    img.addEventListener("error", function () {
+      img.replaceWith(
+        Object.assign(document.createElement("span"), {
+          className: "visit-badge-fallback muted",
+          textContent: "—",
+          title: "Visit badge blocked or unavailable",
+        })
+      );
     });
+  });
 })();

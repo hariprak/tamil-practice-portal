@@ -22,6 +22,8 @@ It is a **static web app** — no server or internet needed.
 
 That's it. Progress, points and badges are saved in the browser on that device.
 
+The **footer visit number** on the portal and spelling pages is a **shared** counter (all visitors) via a small third-party badge service; it is not stored in your app’s `localStorage`.
+
 ### Host it online (free)
 
 See **[HOSTING.md](HOSTING.md)** for **GitHub Pages**, **Netlify**, and **Cloudflare Pages** — including notes for **HTTPS**, **custom domains**, and **future display ads** (policy pages, where to place ad code).
