@@ -103,6 +103,8 @@ h1, h2, h3 { font-weight: 700; }
   flex-shrink: 0;
   display: block;
   opacity: 0.95;
+  /* Optical align with Tamil + Latin text */
+  transform: translateY(0.01em);
 }
 .hub-link:hover { color: var(--accent); }
 .hub-link:hover .hub-link-icon { opacity: 1; }
