@@ -378,15 +378,12 @@
     ["dashDiff", "setupDiff"].forEach(id => $(id).querySelectorAll(".seg-btn").forEach(b => b.classList.toggle("active", b.dataset.diff === state.diff)));
     ["dashLen", "setupLen"].forEach(id => $(id).querySelectorAll(".seg-btn").forEach(b => b.classList.toggle("active", +b.dataset.len === state.count)));
   }
-  function buildClassChoices() {
-    const wrap = $("classChoices"); wrap.innerHTML = "";
+  /** Word set class (e.g. "10"); no UI — first class from data. */
+  function ensureDefaultClass() {
     const classes = META.classes && META.classes.length ? META.classes : Object.keys(WORDS);
-    if (!state.cls) state.cls = classes[0];
-    classes.forEach(c => {
-      const b = el("button", "seg-btn" + (c === state.cls ? " active" : ""), "Class " + c);
-      b.addEventListener("click", () => { wrap.querySelectorAll(".seg-btn").forEach(x => x.classList.remove("active")); b.classList.add("active"); state.cls = c; save(); });
-      wrap.appendChild(b);
-    });
+    if (!classes.length) return;
+    const valid = new Set(classes.map(String));
+    if (!state.cls || !valid.has(String(state.cls))) state.cls = String(classes[0]);
   }
   function applyTheme() {
     document.documentElement.setAttribute("data-theme", state.theme);
@@ -397,7 +394,7 @@
 
   /* ================================================================ Init */
   function init() {
-    applyTheme(); buildClassChoices(); syncHeader(); syncSetupUI(); renderDashboard();
+    applyTheme(); ensureDefaultClass(); syncHeader(); syncSetupUI(); renderDashboard();
 
     segGroup("dashDiff", "diff", v => { state.diff = v; save(); syncSetupUI(); });
     segGroup("setupDiff", "diff", v => { state.diff = v; save(); syncSetupUI(); });
@@ -419,7 +416,7 @@
     $("themeToggle").addEventListener("click", () => { state.theme = state.theme === "dark" ? "light" : "dark"; save(); applyTheme(); });
     $("setLight").addEventListener("click", () => { state.theme = "light"; save(); applyTheme(); });
     $("setDark").addEventListener("click", () => { state.theme = "dark"; save(); applyTheme(); });
-    $("resetBtn").addEventListener("click", () => { if (confirm("Erase all progress, points and badges?")) { state = Object.assign({}, defaults); save(); applyTheme(); buildClassChoices(); syncHeader(); syncSetupUI(); renderDashboard(); alert("Progress reset."); } });
+    $("resetBtn").addEventListener("click", () => { if (confirm("Erase all progress, points and badges?")) { state = Object.assign({}, defaults); save(); applyTheme(); ensureDefaultClass(); syncHeader(); syncSetupUI(); renderDashboard(); alert("Progress reset."); } });
 
     document.addEventListener("keydown", (e) => {
       if (!$("view-play").classList.contains("active")) return;

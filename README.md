@@ -69,7 +69,7 @@ You can feed in more PDFs (Class 6–12) and the app will grow automatically.
    py scripts\build_wordsjs.py
    ```
 
-4. Reload **`spelling.html`** (or refresh if it is already open). The new class appears under **Settings → Class**.
+4. Reload **`spelling.html`** (or refresh if it is already open). Rebuilt data is loaded from **`web/data/words.js`**; the app uses the **first** class key in `TAMIL_META.classes` (see that file’s header). If you add more classes to the build, list order in metadata determines which set is used unless you add a class picker back.
 
 ### Requirements for the scripts
 - Python 3 with **PyMuPDF**:

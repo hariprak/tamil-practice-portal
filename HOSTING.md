@@ -20,14 +20,34 @@ This repo does **not** include ad scripts yet; deploy first, then add your publi
 
 ## Option A — GitHub Pages (free, good with Git)
 
-1. Create a **GitHub** repository and push this project (include the `.github` folder).
-2. In the repo: **Settings → Pages → Build and deployment → Source**: choose **GitHub Actions** (not “Deploy from a branch” for this layout).
-3. Push to **`main`** (or edit the workflow branch name). The workflow publishes **`web/`** as the site root.
-4. Your site URL depends on the repo name:
-   - **Project site** (any repo name): `https://<username>.github.io/<repository>/`
-   - **User/org site** (repo must be `<username>.github.io`): `https://<username>.github.io/`
-5. Relative links in `web/` (`spelling.html`, `css/styles.css`, …) work on both layouts.
-6. **Custom domain (optional):** Settings → Pages → Custom domain; add DNS at your registrar per GitHub’s instructions.
+This repo includes [`.github/workflows/deploy-github-pages.yml`](.github/workflows/deploy-github-pages.yml): on every push to **`main`**, it publishes the **`web/`** folder as the site root.
+
+### First-time enable (do this once on GitHub)
+
+1. Open your repo on GitHub (e.g. `hariprak/tamil-practice-portal`).
+2. **Settings** → **Pages** (left sidebar).
+3. Under **Build and deployment**, set **Source** to **GitHub Actions** (not “Deploy from a branch”).  
+   If you do not see Actions as a source, confirm **Actions** are allowed: **Settings** → **Actions** → **General** → allow actions on this repository.
+4. Optional but fixes some first-deploy errors: **Settings** → **Actions** → **General** → **Workflow permissions** → select **Read and write permissions**, then **Save**.
+5. Trigger a deploy:
+   - **Actions** tab → workflow **Deploy GitHub Pages** → **Run workflow** (branch `main`), **or**
+   - Push any commit to `main` from your PC (`git push`).
+6. When the workflow finishes green, return to **Settings** → **Pages**: GitHub shows **Your site is live at** `https://<username>.github.io/<repository>/` (project site).
+
+### URLs
+
+- **Project site** (normal repo name): `https://<username>.github.io/<repository>/`
+- **User site** (repo must be named `<username>.github.io`): `https://<username>.github.io/`
+
+Relative links in `web/` (`spelling.html`, `css/styles.css`, …) work on a project site because the browser resolves them under `/<repository>/`.
+
+### Custom domain (optional)
+
+**Settings** → **Pages** → **Custom domain**; follow GitHub’s DNS instructions at your registrar (or use your DNS host).
+
+### Private repository note
+
+On a **free** GitHub account, **GitHub Pages for a private repo** may require **GitHub Pro** (policy changes over time). If Pages is blocked, make the repo **Public** for free Pages, or upgrade.
 
 ---
 
@@ -56,6 +76,27 @@ HTTPS and preview URLs are automatic. Add a custom domain under **Domain setting
 4. Connect repo, deploy.
 
 Custom domains and TLS are first-class on Cloudflare.
+
+### Syncing local edits to Cloudflare Pages
+
+Cloudflare does **not** read files from your PC. It watches **GitHub**: each **push** to your production branch (usually `main`) triggers a **new deployment** from the latest commit.
+
+1. Edit the project under your clone (for the live site, most edits are under **`web/`**).
+2. Commit and push:
+
+   ```powershell
+   cd C:\Users\hariprak\tamil-practice-portal
+   git add -A
+   git status
+   git commit -m "Short description of change"
+   git push origin main
+   ```
+
+   Use your real branch name if it is not `main`.
+
+3. In Cloudflare: **Workers & Pages** → your project → **Deployments**. When the latest run shows **Success**, the public URL (e.g. `*.pages.dev` or your custom domain) serves that build—often within about one to two minutes.
+
+Optional: enable **preview deployments** for pull requests in the Pages project settings if you want a unique URL per PR before merging to `main`.
 
 ---
 
