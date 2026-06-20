@@ -88,19 +88,53 @@ h1, h2, h3 { font-weight: 700; }
 .side-brand { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 6px 8px; }
 .side-brand-top { display: flex; align-items: center; gap: 12px; }
 .hub-link {
-  font-size: 12px; font-weight: 600; color: var(--muted); text-decoration: none;
-  padding: 4px 0 2px; border-radius: 8px; transition: color .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 6px 4px 4px;
+  border-radius: 8px;
+  transition: color 0.15s;
+}
+.hub-link-icon {
+  flex-shrink: 0;
+  display: block;
+  opacity: 0.95;
 }
 .hub-link:hover { color: var(--accent); }
+.hub-link:hover .hub-link-icon { opacity: 1; }
 
-/* ===================== Landing (portal home) ===================== */
-.landing-body { min-height: 100vh; }
-.landing-wrap {
-  max-width: 920px; margin: 0 auto; padding: clamp(24px, 5vw, 48px) 20px 60px;
-  position: relative; z-index: 1;
+/* ===================== Landing (portal home) — compact for one laptop screen ===================== */
+.landing-body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
 }
-.landing-head { text-align: center; margin-bottom: 36px; }
-.landing-head h1 { margin: 0 0 8px; font-size: clamp(1.5rem, 4vw, 2rem); }
+.landing-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(6px, 1.6vh, 16px);
+  max-width: 920px;
+  width: 100%;
+  margin: 0 auto;
+  padding: clamp(8px, 1.5vh, 20px) 16px;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+}
+.landing-head { text-align: center; margin-bottom: 0; }
+.landing-head h1 {
+  margin: 0 0 4px;
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+}
+.landing-head .muted { margin: 0; font-size: clamp(0.85rem, 1.8vw, 0.95rem); }
 .landing-logo {
   display: inline-grid; place-items: center; width: 56px; height: 56px; margin-bottom: 14px;
   border-radius: 16px; font-size: 28px; font-weight: 800; color: #fff;
@@ -109,9 +143,9 @@ h1, h2, h3 { font-weight: 700; }
 }
 /* Thiruvalluvar photo (replaces letter mark on portal home) */
 .landing-logo--photo {
-  width: 76px;
-  height: 76px;
-  margin: 0 auto 12px;
+  width: clamp(52px, 11vh, 76px);
+  height: clamp(52px, 11vh, 76px);
+  margin: 0 auto 6px;
   padding: 0;
   overflow: hidden;
   border: 2px solid var(--glass-border);
@@ -125,37 +159,120 @@ h1, h2, h3 { font-weight: 700; }
   display: block;
 }
 .landing-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(10px, 1.6vh, 16px);
 }
 .landing-card {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
-  padding: 26px 24px; border-radius: var(--radius); text-decoration: none; color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: clamp(12px, 1.8vh, 18px) clamp(14px, 2.5vw, 20px);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: inherit;
   transition: transform .18s ease, box-shadow .2s;
 }
-.landing-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,.12); }
-[data-theme="dark"] .landing-card:hover { box-shadow: 0 20px 48px rgba(0,0,0,.35); }
-.landing-card-ico { font-size: 36px; line-height: 1; }
-.landing-card h2 { margin: 0; font-size: 1.35rem; }
-.landing-card p { margin: 0; font-size: 14px; line-height: 1.45; }
+.landing-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.12); }
+[data-theme="dark"] .landing-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,.35); }
+.landing-card-ico { font-size: clamp(26px, 3.8vh, 34px); line-height: 1; }
+.landing-card h2 { margin: 0; font-size: clamp(1.05rem, 2.1vw, 1.25rem); }
+.landing-card p { margin: 0; font-size: 13px; line-height: 1.35; }
 .landing-card-go {
-  margin-top: 6px; font-weight: 700; font-size: 14px; color: var(--accent);
+  margin-top: 4px;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--accent);
 }
-.landing-extras {
-  margin-top: 28px;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
+/* Floating home + share (portal home only) */
+.share-fab-bar {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.landing-card-static {
-  margin-bottom: 0;
-  text-align: left;
+.share-fab {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  box-shadow: 0 10px 32px rgba(60, 50, 45, 0.18);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  color: var(--text);
+  flex-shrink: 0;
 }
-.landing-card-static h3 { margin: 0 0 8px; font-size: 1.15rem; }
-.share-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
-.share-status { min-height: 1.4em; margin-top: 10px; font-size: 13px; }
+a.share-fab {
+  text-decoration: none;
+  color: var(--text);
+}
+button.share-fab {
+  font: inherit;
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+}
+.share-fab:hover {
+  transform: scale(1.06);
+  box-shadow: 0 12px 36px rgba(60, 50, 45, 0.22);
+}
+.share-fab:active {
+  transform: scale(0.96);
+}
+.share-fab-icon {
+  display: block;
+  width: 26px;
+  height: 26px;
+}
+.share-fab-status {
+  position: fixed;
+  z-index: 39;
+  left: 50%;
+  bottom: calc(max(18px, env(safe-area-inset-bottom, 0px)) + 62px);
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 6px 12px;
+  max-width: min(92vw, 280px);
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+  border-radius: 10px;
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+[data-theme="dark"] .share-fab {
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
+}
+[data-theme="dark"] button.share-fab {
+  background: var(--glass);
+}
+
 .landing-placeholder { max-width: 560px; margin: 0 auto; padding: 28px; }
 .landing-placeholder p { margin: 0 0 14px; }
 .landing-placeholder a.btn-primary { vertical-align: middle; }
+
+@media (max-height: 720px) {
+  .landing-logo--photo {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 4px;
+  }
+  .landing-card-ico { font-size: 24px; }
+  .landing-grid .landing-card { padding: 10px 14px; gap: 6px; }
+  .landing-wrap { gap: 6px; }
+}
 
 /* visitor counter (footer) */
 .visitor-footer {
@@ -215,6 +332,30 @@ h1, h2, h3 { font-weight: 700; }
   color: #fff; box-shadow: 0 8px 18px rgba(255,107,74,.35);
 }
 .ni-ico { font-size: 18px; }
+.ni-ico-svg {
+  font-size: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: -0.15em;
+}
+.ni-ico-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.btn-ico-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-row-ico {
+  flex-shrink: 0;
+}
 [data-theme="dark"] .nav-item:hover { background: rgba(255,255,255,.08); }
 
 /* ----- side foot ----- */

@@ -50,7 +50,7 @@ English pronunciation hint still works).
 
 ### Portal home (`index.html`)
 
-- **Share link** — uses the Web Share API on supported devices, with **Copy link** as a fallback.
+- **Home & share** — two floating buttons at the bottom of the home page: **Home** returns to the portal (`index.html`); **Share** uses the Web Share API or copies the link.
 
 ---
 
@@ -97,7 +97,7 @@ tamil-spelling-portal/
 │  ├─ js/
 │  │  ├─ tamil.js           ← clustering, confusable groups, transliteration
 │  │  ├─ app.js             ← game logic, scoring, views
-│  │  ├─ landing-extras.js  ← share link + copy to clipboard
+│  │  ├─ landing-extras.js  ← home page floating share (share or copy)
 │  │  └─ visitor-counter.js
 │  └─ data/words.js         ← generated word data (loaded by the app)
 ├─ data/
