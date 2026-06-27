@@ -56,7 +56,7 @@ English pronunciation hint still works).
 
 You can feed in more PDFs (Class 6–12) and the app will grow automatically.
 
-1. Put the PDF in `data/pdfs/` (any filename).
+1. Put the PDF in `data/pdfs/` (any filename). PDFs are **local only** (gitignored); the repo ships extracted JSON/JS.
 2. Extract its words (replace `N` with the class number):
 
    ```powershell
@@ -113,7 +113,7 @@ This writes **`web/data/ilakkanam.js`** (`window.TAMIL_ILAKKANAM` + `window.TAMI
 
 ### Adding Class 8–10 grammar from PDFs
 
-1. Put the PDF in `data/pdfs/`.
+1. Put the PDF in `data/pdfs/` (local only; gitignored).
 2. Extract MCQs (heuristic — **review `answer` fields** before publishing):
 
    ```powershell
@@ -161,7 +161,7 @@ tamil-spelling-portal/
 │     ├─ words.js            ← generated spelling data
 │     └─ ilakkanam.js        ← generated grammar MCQ data
 ├─ data/
-│  ├─ pdfs/                 ← source textbook PDFs
+│  ├─ pdfs/                 ← local textbook PDFs (gitignored; see extract scripts)
 │  ├─ class10_words.json    ← extracted words per class (canonical)
 │  ├─ class8_ilakkanam.json ← grammar MCQs per class (canonical)
 │  ├─ class9_ilakkanam.json

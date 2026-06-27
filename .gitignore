@@ -17,3 +17,6 @@ Thumbs.db
 # Local / generated (keep committed words.js if you version it)
 # Uncomment if you prefer not to commit built web data:
 # web/data/words.js
+
+# Textbook PDFs (place locally for extract scripts; not versioned)
+data/pdfs/*.pdf
