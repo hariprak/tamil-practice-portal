@@ -6,14 +6,20 @@ const T = global.window.Tamil;
 const WORDS = global.window.TAMIL_WORDS["10"];
 
 function pool(diff) {
-  const minFreq = diff === "easy" ? 4 : diff === "medium" ? 2 : 1;
+  const minFreq = diff === "easy" ? 4 : 1;
   return WORDS.filter(([w, f]) => {
     if (f < minFreq) return false;
+    const n = T.clusters(w).length;
+    if (diff === "easy") {
+      if (n < 2 || n > 4) return false;
+    } else {
+      if (n < 5 || n > 9) return false;
+    }
     const cl = T.clusters(w);
-    return cl.length >= 2 && cl.length <= 9 && cl.some(c => T.groupOfCluster(c));
+    return cl.some(c => T.groupOfCluster(c));
   });
 }
-function blanksFor(diff, n) { return diff === "easy" ? 1 : diff === "medium" ? Math.min(2, n) : n; }
+function blanksFor(diff, n) { return diff === "easy" ? 1 : n; }
 function buildQ(word, diff) {
   const cl = T.clusters(word);
   const confIdx = cl.map((c, i) => T.groupOfCluster(c) ? i : -1).filter(i => i >= 0);
@@ -23,10 +29,9 @@ function buildQ(word, diff) {
 }
 
 let errors = 0, checked = 0;
-for (const diff of ["easy", "medium", "hard"]) {
+for (const diff of ["easy", "hard"]) {
   const p = pool(diff);
   console.log(`pool[${diff}] = ${p.length} words`);
-  // exhaustively validate a big sample
   for (const [w] of p.slice(0, 4000)) {
     const q = buildQ(w, diff);
     if (q.confIdx.length === 0) { errors++; console.log("NO BLANK:", w); continue; }

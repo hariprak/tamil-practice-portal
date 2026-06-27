@@ -276,41 +276,6 @@ button.share-fab {
   .landing-wrap { gap: 6px; }
 }
 
-/* visitor counter (footer) */
-.visitor-footer {
-  position: relative;
-  z-index: 1;
-  margin-top: 40px;
-  padding: 16px 12px 28px;
-  text-align: center;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-}
-.visit-badge {
-  height: 26px;
-  width: auto;
-  max-width: min(100%, 220px);
-  display: block;
-  vertical-align: middle;
-  border-radius: 12px;
-  box-shadow: 0 4px 14px rgba(60, 50, 45, 0.12);
-}
-[data-theme="dark"] .visit-badge {
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
-}
-.visit-badge-fallback {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--accent);
-  min-width: 1.5em;
-}
-
 .brand-mark {
   width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -569,10 +534,10 @@ button.share-fab {
 /* ===================== Feedback effects ===================== */
 .fx-red {
   position: fixed; inset: 0; z-index: 9998; pointer-events: none; opacity: 0;
-  background: radial-gradient(circle at center, rgba(226, 61, 61, 0) 38%, rgba(226, 61, 61, 0.9) 100%);
+  background: radial-gradient(circle at center, rgba(226, 61, 61, 0) 38%, rgba(226, 61, 61, 1) 100%);
 }
-.fx-red.show { animation: redFlash 720ms ease-in-out; }
-@keyframes redFlash { 0% { opacity: 0; } 45% { opacity: 0.25; } 100% { opacity: 0; } }
+.fx-red.show { animation: redFlash 1000ms ease-in-out; }
+@keyframes redFlash { 0% { opacity: 0; } 45% { opacity: 0.3; } 100% { opacity: 0; } }
 
 .fx-layer { position: fixed; inset: 0; z-index: 9999; pointer-events: none; overflow: hidden; }
 .fx-emoji {

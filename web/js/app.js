@@ -22,6 +22,7 @@
     try {
       const o = Object.assign({}, defaults, JSON.parse(localStorage.getItem(SKEY)) || {});
       delete o.palette;
+      if (o.diff === "medium") o.diff = "easy";
       return o;
     } catch (e) { return Object.assign({}, defaults); }
   }
@@ -90,14 +91,21 @@
   }
 
   /* ================================================================ Pool */
+  function clusterLen(word) { return T.clusters(word).length; }
+
   function pool(diff) {
     const rows = WORDS[state.cls] || [];
-    const minFreq = diff === "easy" ? 4 : diff === "medium" ? 2 : 1;
+    const minFreq = diff === "easy" ? 4 : 1;
     const out = [];
     for (const [w, f] of rows) {
       if (f < minFreq) continue;
+      const n = clusterLen(w);
+      if (diff === "easy") {
+        if (n < 2 || n > 4) continue;
+      } else {
+        if (n < 5 || n > 9) continue;
+      }
       const cl = T.clusters(w);
-      if (cl.length < 2 || cl.length > 9) continue;
       if (!cl.some(c => T.groupOfCluster(c))) continue;
       out.push([w, f]);
     }
@@ -129,7 +137,7 @@
     loadQ();
   }
 
-  function blanksFor(diff, n) { return diff === "easy" ? 1 : diff === "medium" ? Math.min(2, n) : n; }
+  function blanksFor(diff, n) { return diff === "easy" ? 1 : n; }
 
   function buildQ(word) {
     const cl = T.clusters(word);

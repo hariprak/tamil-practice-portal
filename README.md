@@ -22,8 +22,6 @@ It is a **static web app** — no server or internet needed.
 
 That's it. Progress, points and badges are saved in the browser on that device.
 
-The **footer visit badge** on the spelling page is a **shared** counter (all visitors) via a small third-party service; it is not stored in your app’s `localStorage`. The portal home page has no visit counter.
-
 ### Host it online (free)
 
 See **[HOSTING.md](HOSTING.md)** for **GitHub Pages**, **Netlify**, and **Cloudflare Pages** — including notes for **HTTPS**, **custom domains**, and **future display ads** (policy pages, where to place ad code).
@@ -43,7 +41,7 @@ English pronunciation hint still works).
 ## Features
 
 - 🔊 Tamil audio + English pronunciation hint (hidden until you ask, for a real challenge)
-- 🎯 Three difficulty levels (Easy blanks 1 tricky letter → Hard blanks them all)
+- 🎯 Two difficulty levels — **Easy** (2–4 letter words, 1 blank) · **Hard** (5+ letters, all tricky blanks)
 - ⭐ Points, 🔥 daily streak, 🏅 badges (incl. per-group "ழ/ள/ல Master" badges)
 - 📈 Progress dashboard with accuracy per confusable-letter group
 - 🌙 Light / dark theme, responsive (laptop-first, works on phone/tablet)
@@ -98,7 +96,6 @@ tamil-spelling-portal/
 │  │  ├─ tamil.js           ← clustering, confusable groups, transliteration
 │  │  ├─ app.js             ← game logic, scoring, views
 │  │  ├─ landing-extras.js  ← home page floating share (share or copy)
-│  │  └─ visitor-counter.js
 │  └─ data/words.js         ← generated word data (loaded by the app)
 ├─ data/
 │  ├─ pdfs/                 ← source textbook PDFs

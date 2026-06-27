@@ -21,7 +21,7 @@ function clusters(word) {
   }
   return out;
 }
-const BANDS = { easy: [2, 3], medium: [4, 5], hard: [6, 99] };
+const BANDS = { easy: [2, 4], hard: [5, 99] };
 function poolFor(cls, diff) {
   const [lo, hi] = BANDS[diff];
   return (WORDS[cls] || []).filter(([w]) => { const n = clusters(w).length; return n >= lo && n <= hi; });
@@ -29,7 +29,7 @@ function poolFor(cls, diff) {
 
 console.log("Classes:", META.classes, "counts:", META.counts);
 for (const cls of META.classes) {
-  for (const d of ["easy", "medium", "hard"]) {
+  for (const d of ["easy", "hard"]) {
     console.log(`  class ${cls} ${d}: ${poolFor(cls, d).length} words`);
   }
 }
