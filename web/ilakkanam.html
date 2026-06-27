@@ -9,25 +9,236 @@
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Mukta+Malar:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="landing-body">
+<body>
   <div class="bg-gradient"></div>
   <div class="bg-blob blob-1"></div>
   <div class="bg-blob blob-2"></div>
   <div class="bg-blob blob-3"></div>
 
-  <div class="landing-wrap">
-    <header class="landing-head">
-      <span class="landing-logo">📐</span>
-      <h1>Ilakkanam Trainer</h1>
-      <p class="muted">இலக்கணப் பயிற்சி — இன்னும் தயாராக உள்ளது.</p>
-    </header>
+  <div class="layout">
+    <aside class="sidebar glass" id="sidebar">
+      <div class="side-brand">
+        <div class="side-brand-top">
+          <span class="brand-mark">இ</span>
+          <div class="brand-text">
+            <strong>இலக்கணப் பயிற்சி</strong>
+            <small>Ilakkanam Trainer</small>
+          </div>
+        </div>
+        <a href="index.html" class="hub-link">
+          <svg class="hub-link-icon" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" focusable="false">
+            <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z" />
+          </svg>
+          <span>முகப்பு · Portal home</span>
+        </a>
+      </div>
 
-    <div class="card glass landing-placeholder">
-      <p><strong>Coming soon.</strong> This section will hold grammar (ilakkanam) quizzes.</p>
-      <p class="muted">Use <strong>Tamil Spelling Trainer</strong> from the portal home for now.</p>
-      <p><a href="index.html" class="btn-soft">← முகப்பு · Portal home</a>
-        <a href="spelling.html" class="btn-primary" style="margin-left:10px;text-decoration:none;display:inline-block;">Spelling trainer</a></p>
-    </div>
+      <nav class="side-nav">
+        <button class="nav-item active" data-view="dashboard">
+          <span class="ni-ico ni-ico-svg" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" focusable="false">
+              <path fill="currentColor" d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+            </svg>
+          </span>
+          Dashboard
+        </button>
+        <button class="nav-item" data-view="practice-setup"><span class="ni-ico">📐</span> Practice</button>
+        <button class="nav-item" data-view="progress"><span class="ni-ico">📈</span> Progress</button>
+        <button class="nav-item" data-view="badges"><span class="ni-ico">🏅</span> Badges</button>
+        <button class="nav-item" data-view="settings"><span class="ni-ico">⚙️</span> Settings</button>
+      </nav>
+
+      <div class="side-foot">
+        <div class="mini-stat"><span class="chip-ico">★</span><b id="sidePoints">0</b><span class="ms-l">points</span></div>
+        <div class="mini-stat"><span class="chip-ico">🔥</span><b id="sideStreak">0</b><span class="ms-l">day streak</span></div>
+        <button id="themeToggle" class="theme-btn">🌙 <span>Theme</span></button>
+      </div>
+    </aside>
+
+    <button id="menuBtn" class="menu-btn glass" title="Menu">☰</button>
+
+    <main class="main">
+
+      <section class="view active" id="view-dashboard">
+        <header class="view-head">
+          <h1>வணக்கம்! 👋</h1>
+          <p class="muted">இலக்கணம் பயிற்சி — பெயர், வினை, வேற்றுமை, தொடர் MCQ.</p>
+        </header>
+
+        <div class="grid-2">
+          <div class="card glass start-card">
+            <h3>புதிய பயிற்சி · New practice</h3>
+            <div class="field">
+              <label>Class</label>
+              <div id="dashClass" class="seg">
+                <button class="seg-btn" data-cls="8">Class 8</button>
+                <button class="seg-btn" data-cls="9">Class 9</button>
+                <button class="seg-btn active" data-cls="10">Class 10</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Difficulty</label>
+              <div id="dashDiff" class="seg">
+                <button class="seg-btn active" data-diff="easy">எளிது · Easy</button>
+                <button class="seg-btn" data-diff="hard">கடினம் · Hard</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Questions</label>
+              <div id="dashLen" class="seg">
+                <button class="seg-btn" data-len="5">5</button>
+                <button class="seg-btn active" data-len="10">10</button>
+                <button class="seg-btn" data-len="15">15</button>
+              </div>
+            </div>
+            <p id="dashEmptyMsg" class="muted empty-msg" hidden></p>
+            <button id="dashStart" class="btn-primary big">தொடங்கு · Start ▶</button>
+          </div>
+
+          <div class="card glass">
+            <h3>உன் நிலை · Your stats</h3>
+            <div class="stats-grid">
+              <div class="stat-box"><b id="dTotal">0</b><span>Practised</span></div>
+              <div class="stat-box"><b id="dCorrect">0</b><span>Correct</span></div>
+              <div class="stat-box"><b id="dAcc">0%</b><span>Accuracy</span></div>
+              <div class="stat-box"><b id="dBest">0</b><span>Best streak</span></div>
+            </div>
+            <div class="ring-wrap">
+              <div class="goal-ring" id="goalRing"><span id="goalText">0/10</span></div>
+              <div class="goal-label">Today's goal<br><small class="muted">answer 10 MCQs</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card glass">
+          <div class="card-head"><h3>Recent badges</h3></div>
+          <div class="badges-row" id="dashBadges"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-practice-setup">
+        <header class="view-head">
+          <h1>📐 பயிற்சி · Practice</h1>
+          <p class="muted">Choose class, difficulty, and how many MCQs to practise.</p>
+        </header>
+        <div class="card glass start-card">
+          <div class="field">
+            <label>Class</label>
+            <div id="setupClass" class="seg">
+              <button class="seg-btn" data-cls="8">Class 8</button>
+              <button class="seg-btn" data-cls="9">Class 9</button>
+              <button class="seg-btn active" data-cls="10">Class 10</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Difficulty</label>
+            <div id="setupDiff" class="seg">
+              <button class="seg-btn active" data-diff="easy">எளிது · Easy</button>
+              <button class="seg-btn" data-diff="hard">கடினம் · Hard</button>
+            </div>
+            <small class="muted">Easy — foundational topics · Hard — advanced grammar</small>
+          </div>
+          <div class="field">
+            <label>Questions</label>
+            <div id="setupLen" class="seg">
+              <button class="seg-btn" data-len="5">5</button>
+              <button class="seg-btn active" data-len="10">10</button>
+              <button class="seg-btn" data-len="15">15</button>
+            </div>
+          </div>
+          <p id="setupEmptyMsg" class="muted empty-msg" hidden></p>
+          <button id="setupStart" class="btn-primary big">தொடங்கு · Start ▶</button>
+        </div>
+      </section>
+
+      <section class="view" id="view-play">
+        <div class="play-top">
+          <button id="quitBtn" class="icon-btn glass" title="Back">←</button>
+          <div class="progress">
+            <div class="progress-bar"><div id="progressFill"></div></div>
+            <span id="progressText">1 / 10</span>
+          </div>
+          <div class="round-points glass"><span class="chip-ico">★</span><span id="roundPoints">0</span></div>
+        </div>
+
+        <div class="card glass play-card mcq-card">
+          <p id="topicLabel" class="mcq-topic-label">—</p>
+          <p id="prompt" class="mcq-prompt"></p>
+          <div id="mcqOptions" class="mcq-options" role="radiogroup" aria-label="Answer choices"></div>
+          <div class="play-actions">
+            <button id="checkBtn" class="btn-primary">சரிபார் · Check</button>
+            <button id="nextBtn" class="btn-primary" hidden>அடுத்தது · Next →</button>
+          </div>
+          <div id="feedback" class="feedback"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-results">
+        <div class="card glass result-card">
+          <div id="resultEmoji" class="result-emoji">🎉</div>
+          <h2 id="resultTitle">அருமை!</h2>
+          <div class="stats-grid three">
+            <div class="stat-box"><b id="rScore">0</b><span>Score</span></div>
+            <div class="stat-box"><b id="rCorrect">0/0</b><span>Correct</span></div>
+            <div class="stat-box"><b id="rStreak">0</b><span>Best streak</span></div>
+          </div>
+          <div id="newBadges" class="badges-row center"></div>
+          <div id="reviewList" class="review-list"></div>
+          <div class="result-actions">
+            <button id="againBtn" class="btn-primary big">மீண்டும் · Again</button>
+            <button id="homeBtn" class="btn-soft btn-ico-row">
+              <svg class="btn-row-ico" aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" focusable="false">
+                <path fill="currentColor" d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+              </svg>
+              Dashboard
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-progress">
+        <header class="view-head"><h1>📈 முன்னேற்றம் · Progress</h1></header>
+        <div class="card glass">
+          <div class="stats-grid">
+            <div class="stat-box"><b id="pTotal">0</b><span>Questions practised</span></div>
+            <div class="stat-box"><b id="pCorrect">0</b><span>Correct</span></div>
+            <div class="stat-box"><b id="pAcc">0%</b><span>Accuracy</span></div>
+            <div class="stat-box"><b id="pBest">0</b><span>Best streak</span></div>
+          </div>
+        </div>
+        <div class="card glass">
+          <h3>By grammar topic</h3>
+          <div id="topicStats" class="group-stats"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-badges">
+        <header class="view-head"><h1>🏅 சின்னங்கள் · Badges</h1></header>
+        <div class="card glass"><div class="badges-row" id="allBadges"></div></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <header class="view-head"><h1>⚙️ அமைப்புகள் · Settings</h1></header>
+        <div class="card glass">
+          <div class="field"><label>Appearance</label>
+            <div class="seg">
+              <button class="seg-btn" id="setLight">☀️ Light</button>
+              <button class="seg-btn" id="setDark">🌙 Dark</button>
+            </div>
+          </div>
+          <div class="field"><label>Danger zone</label>
+            <button id="resetBtn" class="btn-soft danger">Reset all progress</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
   </div>
+
+  <div id="fxRed" class="fx-red" aria-hidden="true"></div>
+  <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
+
+  <script src="data/ilakkanam.js"></script>
+  <script src="js/ilakkanam.js"></script>
 </body>
 </html>

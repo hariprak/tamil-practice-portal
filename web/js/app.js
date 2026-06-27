@@ -15,13 +15,14 @@
     badges: [], theme: "light", dayStreak: 0, lastDate: null,
     todayDate: null, todayCount: 0,
     groups: { la: { t: 0, c: 0 }, ra: { t: 0, c: 0 }, na: { t: 0, c: 0 } },
-    cls: null, diff: "easy", count: 10,
+    diff: "easy", count: 10,
   };
   let state = load();
   function load() {
     try {
       const o = Object.assign({}, defaults, JSON.parse(localStorage.getItem(SKEY)) || {});
       delete o.palette;
+      delete o.cls;
       if (o.diff === "medium") o.diff = "easy";
       return o;
     } catch (e) { return Object.assign({}, defaults); }
@@ -93,8 +94,20 @@
   /* ================================================================ Pool */
   function clusterLen(word) { return T.clusters(word).length; }
 
+  /** Merge word lists from all loaded classes (8, 9, 10, …); sum frequencies. */
+  function mergedWordRows() {
+    const classes = META.classes?.length ? META.classes : Object.keys(WORDS);
+    const freq = new Map();
+    for (const cls of classes) {
+      for (const [w, f] of WORDS[cls] || []) {
+        freq.set(w, (freq.get(w) || 0) + f);
+      }
+    }
+    return [...freq.entries()];
+  }
+
   function pool(diff) {
-    const rows = WORDS[state.cls] || [];
+    const rows = mergedWordRows();
     const minFreq = diff === "easy" ? 4 : 1;
     const out = [];
     for (const [w, f] of rows) {
@@ -127,7 +140,6 @@
   /* ================================================================ Session */
   let S = null;
   function startSession() {
-    if (!state.cls) state.cls = (META.classes[0] || Object.keys(WORDS)[0]);
     const p = pool(state.diff);
     if (p.length < 3) { alert("Not enough words yet for this setting."); return; }
     const words = sample(p, Math.min(state.count, p.length));
@@ -386,13 +398,7 @@
     ["dashDiff", "setupDiff"].forEach(id => $(id).querySelectorAll(".seg-btn").forEach(b => b.classList.toggle("active", b.dataset.diff === state.diff)));
     ["dashLen", "setupLen"].forEach(id => $(id).querySelectorAll(".seg-btn").forEach(b => b.classList.toggle("active", +b.dataset.len === state.count)));
   }
-  /** Word set class (e.g. "10"); no UI — first class from data. */
-  function ensureDefaultClass() {
-    const classes = META.classes && META.classes.length ? META.classes : Object.keys(WORDS);
-    if (!classes.length) return;
-    const valid = new Set(classes.map(String));
-    if (!state.cls || !valid.has(String(state.cls))) state.cls = String(classes[0]);
-  }
+
   function applyTheme() {
     document.documentElement.setAttribute("data-theme", state.theme);
     $("themeToggle").innerHTML = (state.theme === "dark" ? "☀️" : "🌙") + " <span>Theme</span>";
@@ -402,7 +408,7 @@
 
   /* ================================================================ Init */
   function init() {
-    applyTheme(); ensureDefaultClass(); syncHeader(); syncSetupUI(); renderDashboard();
+    applyTheme(); syncHeader(); syncSetupUI(); renderDashboard();
 
     segGroup("dashDiff", "diff", v => { state.diff = v; save(); syncSetupUI(); });
     segGroup("setupDiff", "diff", v => { state.diff = v; save(); syncSetupUI(); });
@@ -424,7 +430,7 @@
     $("themeToggle").addEventListener("click", () => { state.theme = state.theme === "dark" ? "light" : "dark"; save(); applyTheme(); });
     $("setLight").addEventListener("click", () => { state.theme = "light"; save(); applyTheme(); });
     $("setDark").addEventListener("click", () => { state.theme = "dark"; save(); applyTheme(); });
-    $("resetBtn").addEventListener("click", () => { if (confirm("Erase all progress, points and badges?")) { state = Object.assign({}, defaults); save(); applyTheme(); ensureDefaultClass(); syncHeader(); syncSetupUI(); renderDashboard(); alert("Progress reset."); } });
+    $("resetBtn").addEventListener("click", () => { if (confirm("Erase all progress, points and badges?")) { state = Object.assign({}, defaults); save(); applyTheme(); syncHeader(); syncSetupUI(); renderDashboard(); alert("Progress reset."); } });
 
     document.addEventListener("keydown", (e) => {
       if (!$("view-play").classList.contains("active")) return;

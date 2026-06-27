@@ -18,7 +18,7 @@ It is a **static web app** — no server or internet needed.
 
 1. Open the `web` folder.
 2. Double-click **`index.html`** — the **portal home** with two choices.
-3. Choose **Tamil Spelling Trainer** to open **`spelling.html`** (the full spelling app).
+3. Choose **Tamil Spelling Trainer** (`spelling.html`) or **Ilakkanam Trainer** (`ilakkanam.html`).
 
 That's it. Progress, points and badges are saved in the browser on that device.
 
@@ -69,7 +69,67 @@ You can feed in more PDFs (Class 6–12) and the app will grow automatically.
    py scripts\build_wordsjs.py
    ```
 
-4. Reload **`spelling.html`** (or refresh if it is already open). Rebuilt data is loaded from **`web/data/words.js`**; the app uses the **first** class key in `TAMIL_META.classes` (see that file’s header). If you add more classes to the build, list order in metadata determines which set is used unless you add a class picker back.
+4. Reload **`spelling.html`**. Rebuilt data is in **`web/data/words.js`** — the spelling app **merges all classes** (8 + 9 + 10) into one practice pool automatically.
+
+**Per-class word counts (2025 TN textbooks):** Class 8 ≈ 13,550 · Class 9 ≈ 15,981 · Class 10 ≈ 16,643 (frequencies are summed when the same word appears in multiple books).
+
+---
+
+## Ilakkanam trainer (grammar MCQs)
+
+Open **`ilakkanam.html`** from the portal home. Pick **Class**, **Easy/Hard**, and **5/10/15** questions, then answer four-option grammar MCQs.
+
+### Data format (`data/classN_ilakkanam.json`)
+
+```json
+{
+  "class": "10",
+  "source": "class10.pdf",
+  "questions": [
+    {
+      "id": "10-e-001",
+      "diff": "easy",
+      "topic": "பெயர்ச்சொல்",
+      "prompt": "பின்வருவனவற்றுள் பெயர்ச்சொல் எது?",
+      "options": ["ஓடினான்", "மரம்", "அழகாக", "மிகவும்"],
+      "answer": 1
+    }
+  ]
+}
+```
+
+- `answer` is the **0-based index** into `options` (four choices).
+- `chapter` (optional) — textbook **இயல்** (unit) number; shown in the app as `(இயல் N)` after the question. Auto-filled when extracting from PDFs.
+- `diff`: `"easy"` or `"hard"` — filtered at session start.
+- Class 8/9 files may be empty until you add textbook PDFs.
+
+### Build Ilakkanam data for the app
+
+```powershell
+py scripts\build_ilakkanamjs.py
+```
+
+This writes **`web/data/ilakkanam.js`** (`window.TAMIL_ILAKKANAM` + `window.TAMIL_ILAKKANAM_META`).
+
+### Adding Class 8–10 grammar from PDFs
+
+1. Put the PDF in `data/pdfs/`.
+2. Extract MCQs (heuristic — **review `answer` fields** before publishing):
+
+   ```powershell
+   py scripts\extract_ilakkanam_mcq.py data\pdfs\class8.pdf data\class8_ilakkanam.json --class 8
+   py scripts\extract_ilakkanam_mcq.py data\pdfs\class9.pdf data\class9_ilakkanam.json --class 9
+   py scripts\extract_ilakkanam_mcq.py data\pdfs\class10.pdf data\class10_ilakkanam.json --class 10
+   ```
+
+3. Rebuild: `py scripts\build_ilakkanamjs.py`
+4. Reload **`ilakkanam.html`**.
+
+v1 ships with **sample Class 10** questions plus **PDF-extracted** grammar MCQs for Class 8–9 where the textbook format allows reliable parsing.
+
+**Extracted counts (2025 TN textbooks):** Class 8 ≈ 50 MCQs · Class 9 ≈ 3 MCQs · Class 10 = 20 curated seed MCQs (Class 10 PDF auto-extraction is limited; expand `data/class10_ilakkanam.json` manually or improve the extractor).
+
+> **Note:** Textbooks do not include answer keys in the student PDF. The extractor infers answers from nearby lesson text; review `data/class*_ilakkanam.json` before publishing if accuracy is critical.
 
 ### Requirements for the scripts
 - Python 3 with **PyMuPDF**:
@@ -90,19 +150,27 @@ tamil-spelling-portal/
 ├─ web/                     ← static site root
 │  ├─ index.html             ← portal landing (trainers + share)
 │  ├─ spelling.html          ← Tamil Spelling Trainer (main app)
-│  ├─ ilakkanam.html         ← Ilakkanam tester placeholder
+│  ├─ ilakkanam.html         ← Ilakkanam grammar MCQ trainer
 │  ├─ css/styles.css
 │  ├─ js/
 │  │  ├─ tamil.js           ← clustering, confusable groups, transliteration
-│  │  ├─ app.js             ← game logic, scoring, views
+│  │  ├─ app.js             ← spelling game logic, scoring, views
+│  │  ├─ ilakkanam.js        ← grammar MCQ session logic
 │  │  ├─ landing-extras.js  ← home page floating share (share or copy)
-│  └─ data/words.js         ← generated word data (loaded by the app)
+│  └─ data/
+│     ├─ words.js            ← generated spelling data
+│     └─ ilakkanam.js        ← generated grammar MCQ data
 ├─ data/
 │  ├─ pdfs/                 ← source textbook PDFs
-│  └─ class10_words.json    ← extracted words per class (canonical)
+│  ├─ class10_words.json    ← extracted words per class (canonical)
+│  ├─ class8_ilakkanam.json ← grammar MCQs per class (canonical)
+│  ├─ class9_ilakkanam.json
+│  └─ class10_ilakkanam.json
 └─ scripts/
    ├─ extract_words.py      ← PDF → clean Tamil words (fixes font artifacts)
    ├─ build_wordsjs.py      ← merge class JSONs → web/data/words.js
+   ├─ extract_ilakkanam_mcq.py ← PDF → grammar MCQs (heuristic; review answers)
+   ├─ build_ilakkanamjs.py  ← merge class JSONs → web/data/ilakkanam.js
    └─ *.py / *.js           ← analysis & test helpers
 ```
 
