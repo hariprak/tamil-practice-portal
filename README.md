@@ -48,7 +48,7 @@ English pronunciation hint still works).
 
 ### Portal home (`index.html`)
 
-- **Home & share** — two floating buttons at the bottom of the home page: **Home** returns to the portal (`index.html`); **Share** uses the Web Share API or copies the link.
+- **Share** — floating button at the bottom of the home page uses the Web Share API or copies the link.
 
 ---
 
